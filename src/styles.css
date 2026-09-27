@@ -1,0 +1,301 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * AreaFit design system.
+ *
+ * Brand = dark ink / deep navy + warm off-white + neutral grays.
+ * Semantic match colors (emerald / green / amber / cool gray) are RESERVED
+ * for recommendation strength and must never be used as decoration.
+ */
+
+@theme inline {
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Familjen Grotesk", "Inter Tight", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* brand + surfaces */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+
+  /* text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  /* lines */
+  --color-border-strong: var(--border-strong);
+
+  /* semantic match scale */
+  --color-match-excellent: var(--match-excellent);
+  --color-match-strong: var(--match-strong);
+  --color-match-possible: var(--match-possible);
+  --color-match-low: var(--match-low);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
+
+  /* map */
+  --color-map-land: var(--map-land);
+  --color-map-water: var(--map-water);
+  --color-selected: var(--selected);
+
+  /* legacy aliases kept so existing utilities keep resolving */
+  --color-tier-excellent: var(--match-excellent);
+  --color-tier-strong: var(--match-strong);
+  --color-tier-possible: var(--match-possible);
+  --color-tier-low: var(--match-low);
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-4xl: 20px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.25rem;
+
+  /* brand: deep navy ink */
+  --brand: oklch(0.255 0.033 256);
+  --brand-foreground: oklch(0.985 0.004 95);
+  --ink: oklch(0.205 0.028 256);
+
+  /* surfaces: warm off-white → white */
+  --background: oklch(0.981 0.005 90);
+  --surface: oklch(0.972 0.006 90);
+  --surface-subtle: oklch(0.958 0.007 90);
+  --surface-raised: oklch(1 0 0);
+
+  /* text: high-contrast, no pale grays */
+  --foreground: oklch(0.225 0.022 256);
+  --text-primary: oklch(0.225 0.022 256);
+  --text-secondary: oklch(0.435 0.018 256);
+  --text-muted: oklch(0.545 0.015 256);
+
+  --card: oklch(1 0 0);
+  --card-foreground: var(--text-primary);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--text-primary);
+
+  --primary: oklch(0.255 0.033 256);
+  --primary-foreground: oklch(0.985 0.004 95);
+  --secondary: oklch(0.945 0.008 90);
+  --secondary-foreground: oklch(0.28 0.025 256);
+  --muted: oklch(0.949 0.006 90);
+  --muted-foreground: var(--text-secondary);
+  --accent: oklch(0.935 0.011 256);
+  --accent-foreground: oklch(0.28 0.025 256);
+  --destructive: oklch(0.52 0.17 28);
+  --destructive-foreground: oklch(0.985 0.004 95);
+
+  --border: oklch(0.898 0.006 90);
+  --border-strong: oklch(0.812 0.009 256);
+  --input: oklch(0.878 0.007 90);
+  --ring: oklch(0.42 0.05 256);
+
+  /* semantic match scale — data only */
+  --match-excellent: oklch(0.516 0.103 166.1);
+  --match-strong: oklch(0.637 0.115 157.2);
+  --match-possible: oklch(0.681 0.129 72);
+  --match-low: oklch(0.71 0.02 258.4);
+  --positive: oklch(0.516 0.103 166.1);
+  --warning: oklch(0.585 0.108 68);
+
+  /* map */
+  --map-land: oklch(0.962 0.004 90);
+  --map-water: oklch(0.928 0.012 236);
+  --selected: oklch(0.205 0.028 256);
+
+  --chart-1: var(--match-excellent);
+  --chart-2: var(--match-strong);
+  --chart-3: var(--match-possible);
+  --chart-4: oklch(0.5 0.07 250);
+  --chart-5: oklch(0.6 0.1 30);
+
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+.dark {
+  --brand: oklch(0.93 0.008 256);
+  --brand-foreground: oklch(0.18 0.026 256);
+  --ink: oklch(0.93 0.008 256);
+  --background: oklch(0.168 0.024 256);
+  --surface: oklch(0.196 0.026 256);
+  --surface-subtle: oklch(0.222 0.027 256);
+  --surface-raised: oklch(0.232 0.027 256);
+  --foreground: oklch(0.972 0.004 90);
+  --text-primary: oklch(0.972 0.004 90);
+  --text-secondary: oklch(0.795 0.012 256);
+  --text-muted: oklch(0.705 0.014 256);
+  --card: var(--surface-raised);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--text-primary);
+  --primary: oklch(0.93 0.008 256);
+  --primary-foreground: oklch(0.18 0.026 256);
+  --secondary: oklch(0.268 0.028 256);
+  --secondary-foreground: oklch(0.972 0.004 90);
+  --muted: oklch(0.268 0.028 256);
+  --muted-foreground: var(--text-secondary);
+  --accent: oklch(0.288 0.03 256);
+  --accent-foreground: oklch(0.972 0.004 90);
+  --destructive: oklch(0.65 0.17 25);
+  --destructive-foreground: oklch(0.98 0.004 90);
+  --border: oklch(1 0 0 / 12%);
+  --border-strong: oklch(1 0 0 / 26%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.7 0.02 256);
+  --match-excellent: oklch(0.62 0.12 163);
+  --match-strong: oklch(0.7 0.11 156);
+  --match-possible: oklch(0.76 0.13 76);
+  --match-low: oklch(0.6 0.014 250);
+  --positive: oklch(0.62 0.12 163);
+  --warning: oklch(0.7 0.11 68);
+  --map-land: oklch(0.3 0.01 256);
+  --map-water: oklch(0.26 0.02 236);
+  --selected: oklch(0.95 0.006 256);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv05";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .af-scroll::-webkit-scrollbar { width: 8px; }
+  .af-scroll::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--color-border-strong) 70%, transparent);
+    border-radius: 999px;
+  }
+  .af-scroll::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* Small uppercase section label */
+@utility wm-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Leaflet tuned for data visualisation: base map recedes */
+.leaflet-container {
+  background: var(--color-map-water);
+  font-family: var(--font-sans);
+}
+/* Keep real map colours (water, parks, roads) — only take the edge off. */
+.leaflet-tile-pane {
+  filter: saturate(0.72) brightness(1.04) contrast(0.96);
+}
+.wm-labels {
+  filter: saturate(0.7) contrast(1.05);
+}
+.leaflet-control-attribution {
+  background: color-mix(in oklch, white 82%, transparent) !important;
+  font-size: 10px !important;
+  color: var(--color-text-muted) !important;
+}
+.leaflet-bar a {
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface-raised) !important;
+}
+.af-tooltip.leaflet-tooltip {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px -12px oklch(0.2 0.02 256 / 0.45);
+  padding: 8px 10px;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+.af-tooltip.leaflet-tooltip::before { display: none; }
+
+@keyframes af-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.af-rise { animation: af-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .af-rise { animation: none; }
+}
