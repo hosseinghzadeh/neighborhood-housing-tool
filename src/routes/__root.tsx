@@ -73,18 +73,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AreaFit — Find where you should call home" },
+      { title: "Neighborhood Housing Tool — Find where you should call home" },
       {
         name: "description",
         content:
-          "AreaFit helps you find where you should call home — ranked, explainable neighbourhood matches across greater Stockholm.",
+          "Neighborhood Housing Tool helps you find where you should call home — ranked, explainable neighbourhood matches across greater Stockholm.",
       },
-      { name: "author", content: "AreaFit" },
-      { property: "og:title", content: "AreaFit — Find where you should call home" },
+      { name: "author", content: "Neighborhood Housing Tool" },
+      {
+        property: "og:title",
+        content: "Neighborhood Housing Tool — Find where you should call home",
+      },
       {
         property: "og:description",
         content:
-          "AreaFit helps you find where you should call home — ranked, explainable neighbourhood matches across greater Stockholm.",
+          "Neighborhood Housing Tool helps you find where you should call home — ranked, explainable neighbourhood matches across greater Stockholm.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

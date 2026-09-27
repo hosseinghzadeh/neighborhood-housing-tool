@@ -10,7 +10,7 @@ const InputSchema = z.object({
     .optional(),
 });
 
-const SYSTEM = `You are AreaFit's requirement extractor for the Stockholm region.
+const SYSTEM = `You are the requirement extractor for Neighborhood Housing Tool, covering the Stockholm region.
 
 Convert the user's natural language into a structured household profile patch and write one short, warm, non-salesy reply (max 45 words) confirming what you understood.
 

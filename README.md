@@ -1,7 +1,7 @@
-# AreaFit
+# Neighborhood Housing Tool
 
 A neighbourhood-matching housing tool. Describe your household, budget and
-priorities in plain language, and AreaFit scores neighbourhoods on safety,
+priorities in plain language, and it scores neighbourhoods on safety,
 schools, education level, commute and affordability — showing which areas
 fit your life, and why.
 

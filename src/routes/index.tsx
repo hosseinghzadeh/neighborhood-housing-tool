@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Columns3, RotateCcw } from "lucide-react";
 
-import { AreaFitLogo } from "../components/brand/AreaFitMark";
+import { BrandLogo } from "../components/brand/BrandMark";
 import { Composer } from "../components/chat/Composer";
 import { Transcript } from "../components/chat/Transcript";
 import { PreferenceChips } from "../components/preferences/PreferenceChips";
@@ -14,9 +14,9 @@ import { REGIONS } from "../data/providers/stockholm-demo-data";
 import { DEMO_PROMPT } from "../services/preference-parser";
 import { useAreaFit, type RegionId } from "../state/useAreaFit";
 
-const TITLE = "AreaFit — Find where you should call home";
+const TITLE = "Neighborhood Housing Tool — Find where you should call home";
 const DESCRIPTION =
-  "Describe your household, budget and priorities. AreaFit scores neighbourhoods on safety, schools, education level, commute and affordability — and shows why.";
+  "Describe your household, budget and priorities. Neighborhood Housing Tool scores neighbourhoods on safety, schools, education level, commute and affordability — and shows why.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,7 +59,7 @@ function Index() {
       {/* ---------------- Left: conversation + recommendations ---------------- */}
       <section className="flex min-h-0 flex-1 flex-col border-border bg-surface lg:h-full lg:w-[40%] lg:min-w-[430px] lg:max-w-[620px] lg:flex-none lg:border-r">
         <header className="flex items-center justify-between gap-3 border-b border-border px-6 py-3.5">
-          <AreaFitLogo />
+          <BrandLogo />
           <div className="flex items-center gap-2">
             <select
               aria-label="Search area"
@@ -214,8 +214,9 @@ function Hero({ onPick }: { onPick: (text: string) => void }) {
           Find where you should call home.
         </h1>
         <p className="mt-4 text-[15px] leading-relaxed text-text-secondary">
-          Tell AreaFit about your household, budget and what matters to you. We combine location,
-          housing, education, safety and mobility data to show which areas fit your life — and why.
+          Tell Neighborhood Housing Tool about your household, budget and what matters to you. We
+          combine location, housing, education, safety and mobility data to show which areas fit
+          your life — and why.
         </p>
 
         <div className="mt-8">
@@ -239,9 +240,10 @@ function Hero({ onPick }: { onPick: (text: string) => void }) {
         </div>
 
         <p className="mt-8 text-[11.5px] leading-relaxed text-text-muted">
-          AreaFit is decision support, not an authority. It never uses ethnicity, religion or other
-          protected characteristics — "well-educated area" is measured as the share of adults with
-          post-secondary education, and crime is described as reported statistics.
+          Neighborhood Housing Tool is decision support, not an authority. It never uses ethnicity,
+          religion or other protected characteristics — "well-educated area" is measured as the
+          share of adults with post-secondary education, and crime is described as reported
+          statistics.
         </p>
       </div>
     </div>

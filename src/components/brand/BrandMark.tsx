@@ -1,8 +1,8 @@
 /**
- * AreaFit brand mark — an understated zigzag glyph, echoing a route
+ * Brand mark — an understated zigzag glyph, echoing a route
  * between places rather than a pin, roof or key.
  */
-export function AreaFitMark({ className = "h-6 w-6" }: { className?: string }) {
+export function BrandMark({ className = "h-6 w-6" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -21,15 +21,15 @@ export function AreaFitMark({ className = "h-6 w-6" }: { className?: string }) {
   );
 }
 
-export function AreaFitLogo({ compact = false }: { compact?: boolean }) {
+export function BrandLogo({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <span className="grid h-8 w-8 place-items-center rounded-[4px] bg-brand text-brand-foreground">
-        <AreaFitMark className="h-[18px] w-[18px]" />
+        <BrandMark className="h-[18px] w-[18px]" />
       </span>
       <div className="leading-tight">
         <div className="font-display text-[15px] font-semibold tracking-[-0.015em] text-text-primary">
-          AreaFit
+          Neighborhood Housing Tool
         </div>
         {compact ? null : (
           <div className="text-[11.5px] text-text-secondary">Find where you should call home.</div>
