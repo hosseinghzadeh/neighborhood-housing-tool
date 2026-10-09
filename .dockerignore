@@ -1,0 +1,17 @@
+node_modules
+.output
+.wrangler
+.nitro
+.vinxi
+.tanstack
+.git
+.github
+.vscode
+.idea
+.DS_Store
+docs
+infra
+*.md
+.env
+.env.*
+.dev.vars
