@@ -15,3 +15,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Base images used in the Dockerfile.
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Terraform providers (infra/.terraform.lock.hcl).
+  - package-ecosystem: "terraform"
+    directory: "/infra"
+    schedule:
+      interval: "weekly"

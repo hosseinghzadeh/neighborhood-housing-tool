@@ -49,3 +49,86 @@ jobs:
 
       - name: Run ${{ matrix.task }}
         run: bun run ${{ matrix.task }}
+
+  # Infrastructure as code: check the Terraform, then use it to build and run
+  # the container (the same Dockerfile that gets published), smoke-test it, and
+  # tear it down again. This runs on every PR, so Dockerfile, Terraform and the
+  # production server are all verified before a merge.
+  infra:
+    name: infra (terraform)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          # Plain terraform binary, so "terraform output -raw" works in $(...).
+          terraform_wrapper: false
+
+      - name: Check formatting
+        run: terraform fmt -check -recursive
+
+      - name: Initialise
+        run: terraform init -input=false
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Provision (build image and start container)
+        run: terraform apply -auto-approve -input=false
+
+      - name: Smoke test
+        run: |
+          url="$(terraform output -raw url)"
+          for i in $(seq 1 30); do
+            if curl -fsS "$url" -o /dev/null; then
+              echo "App is up at $url"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "App did not become healthy in time" >&2
+          docker logs neighborhood-housing-tool || true
+          exit 1
+
+      - name: Tear down
+        if: always()
+        run: terraform destroy -auto-approve -input=false
+
+  # Continuous delivery: on every merge to main, publish the image to the
+  # GitHub Container Registry once all checks above have passed.
+  publish:
+    name: publish (ghcr)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [ci, infra]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
