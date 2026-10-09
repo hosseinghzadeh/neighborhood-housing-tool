@@ -1,5 +1,8 @@
 # Neighborhood Housing Tool
 
+[![CI](https://github.com/hosseinghzadeh/neighborhood-housing-tool/actions/workflows/ci.yml/badge.svg)](https://github.com/hosseinghzadeh/neighborhood-housing-tool/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/hosseinghzadeh/neighborhood-housing-tool/actions/workflows/codeql.yml/badge.svg)](https://github.com/hosseinghzadeh/neighborhood-housing-tool/actions/workflows/codeql.yml)
+
 A neighbourhood-matching housing tool. Describe your household, budget and
 priorities in plain language, and it scores neighbourhoods on safety,
 schools, education level, commute and affordability — showing which areas
@@ -22,6 +25,22 @@ bun dev
 ```
 
 If you prefer npm, `npm install` / `npm run dev` also work.
+
+## Quality gates
+
+Every pull request runs, in GitHub Actions (`.github/workflows/ci.yml`):
+
+| Check               | Command             |
+| ------------------- | ------------------- |
+| Lint                | `bun run lint`      |
+| Type check          | `bun run typecheck` |
+| Unit tests (Vitest) | `bun run test`      |
+| Production build    | `bun run build`     |
+
+CodeQL scans the code for vulnerabilities (`.github/workflows/codeql.yml`) and
+Dependabot opens weekly update PRs (`.github/dependabot.yml`).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the review workflow and
+[docs/AI_USAGE.md](docs/AI_USAGE.md) for how AI tools were used.
 
 ## AI-assisted input (optional)
 
