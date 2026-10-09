@@ -77,21 +77,33 @@ jobs:
       - name: Validate
         run: terraform validate
 
-      - name: Provision (build image and start container)
+      # Throwaway database password for this run; the stack is destroyed at the
+      # end of the job, so no repository secret is needed.
+      - name: Generate database password
+        run: |
+          password="$(openssl rand -hex 16)"
+          echo "::add-mask::$password"
+          echo "TF_VAR_db_password=$password" >> "$GITHUB_ENV"
+
+      - name: Provision (build image, start app and database)
         run: terraform apply -auto-approve -input=false
 
+      # /api/health only returns 200 when the app can query the database, so
+      # this checks the app, the database and the network between them.
       - name: Smoke test
         run: |
-          url="$(terraform output -raw url)"
+          url="$(terraform output -raw url)/api/health"
           for i in $(seq 1 30); do
-            if curl -fsS "$url" -o /dev/null; then
-              echo "App is up at $url"
+            if curl -fsS "$url"; then
+              echo
+              echo "App and database are up ($url)"
               exit 0
             fi
             sleep 2
           done
           echo "App did not become healthy in time" >&2
           docker logs neighborhood-housing-tool || true
+          docker logs neighborhood-housing-tool-db || true
           exit 1
 
       - name: Tear down

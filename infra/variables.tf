@@ -40,3 +40,20 @@ variable "ai_model" {
   type        = string
   default     = null
 }
+
+variable "db_password" {
+  description = "Password for the Postgres user. Required; pass it with -var or the TF_VAR_db_password environment variable, never commit it."
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = length(var.db_password) >= 12
+    error_message = "db_password must be at least 12 characters."
+  }
+}
+
+variable "db_image" {
+  description = "Postgres image for the database container."
+  type        = string
+  default     = "postgres:18-alpine"
+}

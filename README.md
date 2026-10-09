@@ -31,10 +31,12 @@ Open <http://localhost:8080>.
 ```sh
 cd infra
 terraform init
-terraform apply        # builds the image from the Dockerfile and starts the container
+export TF_VAR_db_password='choose-a-password'   # at least 12 characters
+terraform apply        # builds the image, starts the app and a Postgres database
 ```
 
-Open <http://localhost:8080>. Remove everything again with `terraform destroy`.
+Open <http://localhost:8080>; <http://localhost:8080/api/health> returns 200 when
+the app can reach the database. Remove everything again with `terraform destroy`.
 
 To run the image published by the pipeline instead of building it locally
 (the package must be public):
