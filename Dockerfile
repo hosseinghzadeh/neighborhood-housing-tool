@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build stage ----------------------------------------------------------
-FROM node:22-slim AS build
+FROM node:25-slim AS build
 
 # The project uses Bun for dependency management (bun.lock); Vite itself runs on Node.
 COPY --from=oven/bun:1 /usr/local/bin/bun /usr/local/bin/bun
@@ -16,7 +16,7 @@ ENV NITRO_PRESET=node-server
 RUN bun run build
 
 # ---- runtime stage --------------------------------------------------------
-FROM node:22-slim AS runtime
+FROM node:25-slim AS runtime
 
 ENV NODE_ENV=production \
     PORT=3000
