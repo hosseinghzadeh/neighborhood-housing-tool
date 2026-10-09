@@ -1,7 +1,27 @@
 import "./lib/error-capture";
 
+import { ensureSchema, getDb, isDatabaseHealthy } from "./lib/db.server";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+
+// Create the saved_searches table on startup. If Postgres is not up yet this
+// fails quietly and ensureSchema() retries on the first query that needs it.
+if (getDb()) {
+  ensureSchema().catch((error: unknown) => {
+    console.warn("Database schema not ready yet, will retry on first use:", error);
+  });
+}
+
+// GET /api/health: 200 only when the database answers. The CI smoke test
+// relies on this to prove the app and the Terraform-provisioned database work
+// together.
+async function healthResponse(): Promise<Response> {
+  const healthy = await isDatabaseHealthy();
+  return Response.json(
+    { status: healthy ? "ok" : "error", database: healthy ? "up" : "down" },
+    { status: healthy ? 200 : 503, headers: { "cache-control": "no-store" } },
+  );
+}
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -46,6 +66,9 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    if (request.method === "GET" && new URL(request.url).pathname === "/api/health") {
+      return healthResponse();
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

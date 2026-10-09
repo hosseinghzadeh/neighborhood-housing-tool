@@ -10,6 +10,7 @@ import { ResultCard } from "../components/recommendations/ResultCard";
 import { AreaDetails } from "../components/area-details/AreaDetails";
 import { CompareView } from "../components/comparison/CompareView";
 import { StockholmMap } from "../components/map/StockholmMap";
+import { SavedSearches } from "../components/saved-searches/SavedSearches";
 import { REGIONS } from "../data/providers/stockholm-demo-data";
 import { DEMO_PROMPT } from "../services/preference-parser";
 import { useAreaFit, type RegionId } from "../state/useAreaFit";
@@ -134,6 +135,8 @@ function Index() {
                       model. Values are seeded demo data standing in for SCB, Skolverket, Brå and
                       Trafiklab.
                     </p>
+
+                    <SavedSearches profile={af.profile} />
                   </div>
                 )
               ) : null}
