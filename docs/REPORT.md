@@ -114,7 +114,11 @@ full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md).
   (statistics, schools, crime, transport) are not integrated.
 - **Small test surface.** Unit tests cover the scoring engine and the request
   parser; the UI has no automated tests.
-- **Team review.** Required reviews work best with two active reviewers.
+- **Review process.** The ruleset on `main` (a pull request, one approval with
+  code-owner review, and six required checks) was only enabled on 10 October,
+  after the foundation PR (#1) had already been merged without a review. PRs #7,
+  #9 and #10 were each approved by the other team member. With two people, every
+  review depends on the other person being available in time.
 
 ## 6. Contributions
 
@@ -125,3 +129,9 @@ full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md).
 - Reviewed and approved the CD and IaC pull request (PR #7).
 
 **Hossein Ghadirzadeh**
+
+- Migrated the generated application into this repository and cleaned it up: removed the Lovable-specific files and hooks, made the AI endpoint provider-agnostic, fixed the lint and type errors, and unified the naming.
+- Added the unit tests (Vitest) for the scoring engine and the request parser, and set up CI, CodeQL, Dependabot, `CODEOWNERS`, the pull request template and the contributing guide (PR #1).
+- Built the Dockerfile, the Terraform module for the app container, the `infra` and `publish` jobs, and the Dependabot entries for Docker and Terraform (PR #7).
+- Wrote the first draft of this report and of the README pipeline section, and started `docs/AI_USAGE.md`.
+- Reviewed and approved the database pull request (PR #9) and the report update (PR #10), and enabled the ruleset on `main`.
