@@ -3,9 +3,6 @@
 KTH DD2482 · Hossein Ghadirzadeh, Nalin Kundu · Repository:
 <https://github.com/hosseinghzadeh/neighborhood-housing-tool>
 
-> DRAFT: items marked **[CONFIRM]** depend on repository settings or facts only
-> the team can verify. Remove this note and the markers before submitting.
-
 ## 1. What we built
 
 The product is a small web application that helps people who are new to a city
@@ -24,10 +21,11 @@ free text into a structured profile and never to rank areas.
 
 | Concern              | Implementation                                                                            |
 | -------------------- | ----------------------------------------------------------------------------------------- |
-| Platform             | GitHub: pull requests, `CODEOWNERS`, branch protection ruleset **[CONFIRM]**              |
+| Platform             | GitHub: pull requests, `CODEOWNERS`, branch protection ruleset                            |
 | CI                   | GitHub Actions: lint, type check, unit tests and production build in parallel on every PR |
 | IaC                  | Terraform (`infra/`) with the Docker provider                                             |
 | CD                   | GitHub Actions publishes the container image to GHCR on every merge to `main`             |
+| Database             | Postgres container, private network and volume in the same Terraform module               |
 | Quality and security | CodeQL (PRs and weekly), Dependabot (npm/Bun, Actions, Docker, Terraform)                 |
 | AI documentation     | `docs/AI_USAGE.md`                                                                        |
 
@@ -37,8 +35,10 @@ The flow is: a developer opens a pull request from a branch; four CI checks, the
 it to the GitHub Container Registry tagged `latest` and with the commit SHA.
 
 **How the components interact.** The `infra` job is where the pieces meet:
-Terraform builds the image from the repository's `Dockerfile`, starts the
-container, and the job then calls the app over HTTP as a smoke test before
+Terraform builds the image from the repository's `Dockerfile`, starts a
+Postgres container and the app container on a shared private network, and
+passes the app a `DATABASE_URL`. The job then calls `GET /api/health`, which
+only returns 200 when the app can query the database, as a smoke test before
 destroying everything. The same Dockerfile is used by the `publish` job, so what
 is verified on a pull request is what is delivered after the merge. The
 Dockerfile builds the app as a plain Node server (Nitro `node-server` preset)
@@ -58,6 +58,21 @@ independent of any cloud account.
   secrets, so anyone (including a grader) can reproduce `terraform apply`
   locally. The trade-off is that nothing is hosted permanently (see
   limitations).
+- **The database is provisioned by the same Terraform module.** Postgres runs
+  as a second container next to the app, so `terraform apply` brings up the
+  whole system and the CI smoke test exercises the app, the database and the
+  network between them. Postgres publishes no host port (only the app can
+  reach it, by container name), and its data lives in a named volume so it
+  survives container re-creation.
+- **The database stores user data, not the area data.** It holds saved
+  searches (a household profile in a `jsonb` column). The seeded area data
+  stays in code behind the `AreaRepository` interface, because it is static and
+  versioned with the scoring logic. The database is optional: without
+  `DATABASE_URL` the app still works and only saved searches are unavailable.
+- **No stored secret for CI.** The `infra` job generates a random, masked
+  database password for each run and destroys the stack at the end, so the
+  repository needs no database secret. The Terraform variable is marked
+  `sensitive` and must be at least 12 characters.
 - **Publish only after everything else passes.** `publish` depends on the CI
   and `infra` jobs and only runs on `main`, with `packages: write` granted to
   that single job; all other jobs have read-only permissions.
@@ -73,8 +88,7 @@ independent of any cloud account.
 The initial application was generated with Lovable. Migration of that export,
 the tests, the pipeline, the Terraform module, the Dockerfile and a first draft
 of this report were produced with Claude Code and reviewed by the team. The
-full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md). **[CONFIRM and add any
-other AI use, including AI-assisted code review.]**
+full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md).
 
 ## 5. Limitations and trade-offs
 
@@ -86,17 +100,28 @@ other AI use, including AI-assisted code review.]**
 - **Terraform state is local.** That is acceptable because the CI environment
   is ephemeral, but it would not work for a shared environment, which needs a
   remote, locked backend.
-- **No database.** The original proposal mentioned provisioning a database. The
-  app currently keeps its data in code behind an `AreaRepository` interface;
-  we reduced the scope rather than adding storage the app does not need. A
-  database-backed repository would be the place to add it.
+- **Saved searches are visible to everyone.** There is no login, so every
+  visitor sees the 20 most recent saved searches from all users. That is fine
+  for demo data, but real use would need user accounts and per-user queries
+  before anyone stores personal information.
+- **The database password ends up in the Terraform state.** `sensitive` only
+  hides the value in Terraform's output; the state file still stores it in
+  plain text (as the variable, in the Postgres container's environment and in
+  the app's `DATABASE_URL`). In CI the state and the password are thrown away
+  after each run, but a shared environment would need an encrypted remote
+  backend and the password in a secret manager.
 - **Demo data.** The rankings are only as good as the seeded data; real sources
   (statistics, schools, crime, transport) are not integrated.
 - **Small test surface.** Unit tests cover the scoring engine and the request
   parser; the UI has no automated tests.
 - **Team review.** Required reviews work best with two active reviewers.
-  **[CONFIRM how reviews were actually done and describe it honestly.]**
 
 ## 6. Contributions
 
-**[Fill in: who did what.]**
+**Nalin Kundu**
+
+- Planned and implemented the database (PR #9): the Postgres container, private network, volume and password variable in Terraform. Also did the `DATABASE_URL` wiring and the `postgres` client in the app for the saved search test. Also did the `GET /api/health` endpoint, some smoke tests, and the database tests in the CI
+- Updated the README and `docs/AI_USAGE.md` for the database, and updated this report and general documentation with related work and such
+- Reviewed and approved the CD and IaC pull request (PR #7).
+
+**Hossein Ghadirzadeh**
