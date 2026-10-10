@@ -108,9 +108,10 @@ AI_MODEL=some-model-name
   originally scaffolded with [Lovable](https://lovable.dev), but no longer
   syncs with it and has no other Lovable-specific dependency or service call.
 - Map and neighbourhood data (`src/data/`) is seeded demo data for the
-  Stockholm region, not live statistics. There is no database: the data lives in
-  code behind an `AreaRepository` interface (`src/data/providers/`), which is
-  where a database-backed implementation would plug in.
+  Stockholm region, not live statistics. It lives in code behind an
+  `AreaRepository` interface (`src/data/providers/`). The only data stored at
+  run time is user data (saved searches), in a Postgres database that Terraform
+  provisions (see `infra/`).
 - Terraform state is local (ephemeral in CI). There is no persistent hosting
   environment: the pipeline proves the system can be provisioned, run and
   verified from code, and publishes the artifact. Pointing the same Terraform at

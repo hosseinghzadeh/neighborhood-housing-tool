@@ -85,10 +85,13 @@ independent of any cloud account.
 
 ## 4. How AI tools were used
 
-The initial application was generated with Lovable. Migration of that export,
-the tests, the pipeline, the Terraform module, the Dockerfile and a first draft
-of this report were produced with Claude Code and reviewed by the team. The
-full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md).
+The initial application was generated with Lovable. Both of us then used
+Claude Code. Hossein used it for the migration of that export, the tests, the
+pipeline, the Terraform module, the Dockerfile, a first draft of this report,
+and to help read Nalin's pull requests before approving them. Nalin used it for
+the database and the later report updates. Everything was checked by running
+the CI pipeline and, from PR #7 onward, reviewed by the other team member in
+the pull request. The full dated log is in [`docs/AI_USAGE.md`](AI_USAGE.md).
 
 ## 5. Limitations and trade-offs
 
